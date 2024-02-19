@@ -73,7 +73,6 @@ class BlockSimple(nn.Module):
         kernel_size,
         stride,
         dilation,
-        norm_type,
         activation_cls: nn.Module,
         transposed,
         bias: bool = False,

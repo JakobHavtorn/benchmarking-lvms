@@ -3,31 +3,36 @@ Phoneme - Bidirectional 3-layered LSTM with 1D dropout (resampling LVMs)
 ======================================================================================================
 
 Full training set
-python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.0 --epochs 30 --data_type waveform;
-python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.3 --epochs 30 --data_type spectrogram;
-python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.3 --epochs 30 --data_type "model-run-id";
-python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.3 --epochs 30 --data_type "model-run-id";
-python experiments/experiment_asr_ctc_resampling.py --z_index 1 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.3 --epochs 40 --model_id "model-run-id" --model_project stcn;
-python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.3 --epochs 40 --model_id "model-run-id" --model_project cwvae;
-python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.3 --epochs 40 --model_id "model-run-id" --model_project srnn;
-python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.3 --epochs 40 --model_id "model-run-id" --model_project vrnn
+python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.00 --epochs 30 --data_type waveform;
+python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.30 --epochs 30 --data_type spectrogram;
+python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.30 --epochs 30 --data_type "wavenet-run-id";
+python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.30 --epochs 30 --data_type "lstm-run-id";
+python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.30 --epochs 40 --model_id "vrnn-run-id" 
+python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.30 --epochs 40 --model_id "srnn-run-id" 
+python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.30 --epochs 40 --model_id "stcn-run-id" 
+python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.30 --epochs 40 --model_id "stcn-run-id" 
+python experiments/experiment_asr_ctc_resampling.py --z_index 1 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.30 --epochs 40 --model_id "stcn-run-id" 
+python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.30 --epochs 40 --model_id "cwvae-run-id"
+python experiments/experiment_asr_ctc_resampling.py --z_index 1 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.30 --epochs 40 --model_id "cwvae-run-id" 
 
 1 hour subset
-python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.0 --epochs 30 --data_type waveform --train_source train_1h.txt;
+python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.00 --epochs 30 --data_type waveform --train_source train_1h.txt;
 python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 30 --data_type spectrogram --train_source train_1h.txt;
-python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 30 --data_type "model-run-id" --train_source train_1h.txt;
-python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 30 --data_type "model-run-id" --train_source train_1h.txt;
-python experiments/experiment_asr_ctc_resampling.py --z_index 1 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 40 --model_id "model-run-id" --model_project stcn --train_source train_1h.txt;
-python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 40 --model_id "model-run-id" --model_project cwvae --train_source train_1h.txt;
-python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 40 --model_id "model-run-id" --model_project srnn --train_source train_1h.txt;
-python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 40 --model_id "model-run-id" --model_project vrnn --train_source train_1h.txt
+python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 30 --data_type "wavenet-run-id" --train_source train_1h.txt;
+python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 30 --data_type "lstm-run-id" --train_source train_1h.txt;
+python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 40 --model_id "vrnn-run-id" --train_source train_1h.txt;
+python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 40 --model_id "srnn-run-id" --train_source train_1h.txt;
+python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 40 --model_id "stcn-run-id" --train_source train_1h.txt;
+python experiments/experiment_asr_ctc_resampling.py --z_index 1 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 40 --model_id "stcn-run-id" --train_source train_1h.txt;
+python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 40 --model_id "cwvae-run-id" --train_source train_1h.txt
+python experiments/experiment_asr_ctc_resampling.py --z_index 1 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.35 --epochs 40 --model_id "cwvae-run-id" --train_source train_1h.txt
 
 10 minute subset
-python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.0 --epochs 30 --data_type waveform --train_source train_10m.txt;
-python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.4 --epochs 30 --data_type spectrogram --train_source train_10m.txt;
-python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.4 --epochs 30 --data_type "model-run-id" --train_source train_10m.txt;
-python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.4 --epochs 30 --data_type "model-run-id" --train_source train_10m.txt;
-python experiments/experiment_asr_ctc_resampling.py --z_index 1 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.4 --epochs 40 --model_id "model-run-id" --model_project stcn --train_source train_10m.txt;
-python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.4 --epochs 40 --model_id "model-run-id" --model_project cwvae --train_source train_10m.txt;
-python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.4 --epochs 40 --model_id "model-run-id" --model_project srnn --train_source train_10m.txt;
-python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.4 --epochs 40 --model_id "model-run-id" --model_project vrnn --train_source train_10m.txt
+python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.00 --epochs 30 --data_type waveform --train_source train_10m.txt;
+python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.40 --epochs 30 --data_type spectrogram --train_source train_10m.txt;
+python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.40 --epochs 30 --data_type "wavenet-run-id" --train_source train_10m.txt;
+python experiments/experiment_asr_ctc.py --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.40 --epochs 30 --data_type "lstm-run-id" --train_source train_10m.txt;
+python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.40 --epochs 40 --model_id "stcn-run-id" --train_source train_10m.txt;
+python experiments/experiment_asr_ctc_resampling.py --z_index 1 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.40 --epochs 40 --model_id "stcn-run-id" --train_source train_10m.txt;
+python experiments/experiment_asr_ctc_resampling.py --z_index 0 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.40 --epochs 40 --model_id "cwvae-run-id" --train_source train_10m.txt
+python experiments/experiment_asr_ctc_resampling.py --z_index 1 --hidden_size 256 --num_layers 3 --bidirectional True --dropout_prob 0.40 --epochs 40 --model_id "cwvae-run-id" --train_source train_10m.txt

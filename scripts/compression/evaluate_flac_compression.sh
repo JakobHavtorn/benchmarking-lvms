@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# For a directory, recursively find .flac files and compute 
+# For a directory with .flac files, recursively find .flac files and compute 
 # - the orignal file size
 # - the .flac file size
 # - the fraction of the flac file size to the original file (0 < fraction < 1)

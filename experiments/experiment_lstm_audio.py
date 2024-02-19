@@ -6,6 +6,7 @@ import rich
 
 from torch.utils.data import DataLoader
 
+import blvm
 import blvm.models
 
 from blvm.data import BaseDataset
@@ -37,7 +38,7 @@ parser.set_defaults(
     max_grad_norm=3000.0,
     max_grad_value=1000.0,
     dataset="timit",
-    project="benchmarks",
+    project=blvm.WANDB_PROJECT,
     entity=None,
 )
 
@@ -49,10 +50,14 @@ model_group.add_argument("--dropout", default=0, type=float, help="dropout after
 model_group.add_argument("--input_coding", default="mu_law", type=str, choices=["mu_law", "linear"], help="input encoding")
 model_group.add_argument("--num_bits", default=16, type=int, help="number of bits for DML and input")
 model_group.add_argument("--num_mix", default=10, type=int, help="number of logistic mixture components")
+model_group.add_argument("--likelihood", default="DMoL", type=str, help="likelihood for the output p(x_t|x_t-1)")
 model_group.add_argument("--random_segment_size", default=None, type=int, help="timesteps to subsample per training example")
 model_group.add_argument("--split_eval", default=False, type=str2bool, help="If true, split evaluation sequences")
 
 args = parser.parse_args()
+
+if args.likelihood != "DMoL":
+    raise NotImplementedError("Only DMoL likelihood is supported")
 
 if args.seed is None:
     args.seed = get_random_seed()

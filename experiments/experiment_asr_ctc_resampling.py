@@ -43,7 +43,7 @@ parser.set_defaults(
     save_checkpoints=False,
     use_amp=True,
     dataset="timit",
-    project="phonemes",
+    project=blvm.WANDB_PROJECT,
     entity=None,
     num_workers=12,
 )
@@ -53,7 +53,7 @@ model_group = parser.add_argument_group("model")
 
 model_group.add_argument("--train_source", default=None, type=str, help="training data source file name")
 model_group.add_argument("--model_id", type=str, help="id of the model to use for representation extraction.")
-model_group.add_argument("--model_project", type=str, help="project of the model to use for representation extraction.")
+model_group.add_argument("--model_project", default=blvm.WANDB_PROJECT, type=str, help="project of the model to use for representation extraction.")
 model_group.add_argument("--z_index", type=int, help="index of the latent representation layer")
 model_group.add_argument("--text_type", default="phon", choices=["word", "char", "phon"], help="text type")
 

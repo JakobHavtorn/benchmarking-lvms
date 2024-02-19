@@ -31,6 +31,7 @@ parser.set_defaults(
     dataset="timit",
     num_workers=4,
     seed=42,
+    project=blvm.WANDB_PROJECT,
 )
 parser.add_argument("--input_coding", default="mu_law", type=str, choices=["mu_law", "linear"], help="input encoding")
 parser.add_argument("--num_bits", default=16, type=int, help="number of bits for DML and input")

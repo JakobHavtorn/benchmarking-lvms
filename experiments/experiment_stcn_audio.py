@@ -39,7 +39,7 @@ def main():
         max_grad_norm=3000.0,
         max_grad_value=1000.0,
         dataset="timit",
-        project="benchmarks",
+        project=blvm.WANDB_PROJECT,
         entity=None,
     )
 

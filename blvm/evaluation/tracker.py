@@ -132,6 +132,32 @@ class Tracker:
         self.metrics = defaultdict(dict)  # dict(source=dict(metric.name=metric))
         self.accumulated_metrics = defaultdict(lambda: defaultdict(list))  # dict(source=dict(metric.name=list(metric)))
 
+    def state_dict(self) -> Dict[str, Any]:
+        """Return a dictionary containing the tracker's state."""
+        return {
+            "source": self.source,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+            "epoch": self.epoch,
+            "step_within_epoch": self.step_within_epoch,
+            "step_total": self.step_total,
+            "max_steps": self.max_steps,
+            "metrics": {source: {name: metric.state_dict() for name, metric in metrics.items()} for source, metrics in self.metrics.items()},
+            "accumulated_metrics": {source: {name: [metric.state_dict() for metric in metrics] for name, metrics in acc_metrics.items()} for source, acc_metrics in self.accumulated_metrics.items()},
+        }
+
+    def load_state_dict(self, state_dict: Dict[str, Any]):
+        """Load the tracker's state from a dictionary."""
+        self.source = state_dict["source"]
+        self.start_time = state_dict["start_time"]
+        self.end_time = state_dict["end_time"]
+        self.epoch = state_dict["epoch"]
+        self.step_within_epoch = state_dict["step_within_epoch"]
+        self.step_total = state_dict["step_total"]
+        self.max_steps = state_dict["max_steps"]
+        self.metrics = {source: {name: Metric.from_state_dict(metric) for name, metric in metrics.items()} for source, metrics in state_dict["metrics"].items()}
+        self.accumulated_metrics = {source: {name: [Metric.from_state_dict(metric) for metric in metrics] for name, metrics in acc_metrics.items()} for source, acc_metrics in state_dict["accumulated_metrics"].items()}
+
     @property
     def values(self) -> Dict[str, Dict[str, float]]:
         """Values of metrics as nested dict"""

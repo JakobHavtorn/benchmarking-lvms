@@ -44,7 +44,7 @@ parser.set_defaults(
     save_checkpoints=False,
     use_amp=True,
     dataset="timit",
-    project="phonemes",
+    project=blvm.WANDB_PROJECT,
     entity=None,
     num_workers=12,
 )

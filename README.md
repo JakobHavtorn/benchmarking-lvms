@@ -23,7 +23,7 @@ conda deactivate
 conda env remove -n blvm -y
 conda create -y -n blvm python==3.8
 conda activate blvm
-conda install -y -c pytorch -c conda-forge pytorch torchvision torchaudio cudatoolkit=11.3 libsndfile
+conda install -y pytorch==1.9.1 torchvision==0.10.1 torchaudio==0.9.1 -c pytorch
 env REQUIREMENTS_MODE="notorch extra" pip install --upgrade --editable . 
 ```
 

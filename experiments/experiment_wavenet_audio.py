@@ -35,7 +35,7 @@ parser.set_defaults(
     epochs=3000,
     num_workers=8,
     save_checkpoints=True,
-    project="benchmarks",
+    project=blvm.WANDB_PROJECT,
     entity=None,
 )
 
@@ -47,7 +47,7 @@ parser.add_argument("--base_dilation", default=2, type=int, help="base dilation 
 parser.add_argument("--input_coding", default="mu_law", type=str, choices=["mu_law", "frames"], help="input encoding")
 parser.add_argument("--input_embedding_dim", default=1, type=int, help="if not 1, embed input as vector of this dim")
 parser.add_argument("--num_bits", default=16, type=int, help="number of bits for mu_law enc (note the data bits depth)")
-parser.add_argument("--distribution", default="dmol", type=str, help="distribution for the output p(x_t|x_t-1)")
+parser.add_argument("--likelihood", default="DMoL", type=str, help="likelihood for the output p(x_t|x_t-1)")
 parser.add_argument("--random_segment_size", default=None, type=int, help="timesteps to randomly subsample per example")
 parser.add_argument("--n_stack_frames", default=1, type=int, help="frames to stack as input if input_coding is frames")
 parser.add_argument("--split_eval", default=False, type=str2bool, help="If true, split evaluation sequences")
@@ -76,7 +76,7 @@ if args.input_coding == "mu_law":
     encode_transform.append(MuLawEncode(bits=args.num_bits))
     decode_transform.append(MuLawDecode(bits=args.num_bits))
 
-if args.distribution == "gaussian" or args.distribution[:4] == "gmm-":
+if args.likelihood == "gaussian" or args.likelihood[:4] == "gmm-":
     ds = BaseDataset(source=dataset.train, modalities=[(AudioLoader(dataset.audio_ext), Compose(*encode_transform), ListBatcher())], sort=False)
     mean, variance = ds.compute_statistics(num_workers=args.num_workers)
     encode_transform.append(Normalize(mean=mean, std=variance.sqrt()))
@@ -85,7 +85,7 @@ if args.distribution == "gaussian" or args.distribution[:4] == "gmm-":
 if args.input_embedding_dim > 1:
     encode_transform.append(Quantize(bits=args.num_bits))
 
-if args.distribution == "categorical":
+if args.likelihood == "categorical":
     decode_transform.append()  # TODO Opposite of Quantize operation (Scale?)
 
 if args.random_segment_size is not None:
@@ -149,17 +149,17 @@ for source_name in [*dataset.valid_sets, *dataset.test_sets]:
     valid_test_dataloaders[source_name] = valid_loader
 
 
-if args.distribution == "dmol":
+if args.likelihood == "DMoL":
     likelihood = DiscretizedLogisticMixtureDense(args.res_channels, 1, num_mix=10, num_bins=2 ** args.num_bits)
-elif args.distribution == "categorical":
+elif args.likelihood == "Categorical":
     likelihood = CategoricalDense(args.res_chanels, 2 ** args.num_bits)
-elif args.distribution == "gaussian":
+elif args.likelihood == "Gaussian":
     likelihood = DiagonalGaussianDense(args.res_channels, 1, initial_sd=1, epsilon=1e-4)
-elif args.distribution[:4] == "gmm-":
-    num_mix = int(args.distribution.split("-")[-1])
+elif args.likelihood[:4] == "GMM-":
+    num_mix = int(args.likelihood.split("-")[-1])
     likelihood = DiagonalGaussianMixtureDense(args.res_channels, 1, num_mix=num_mix, initial_sd=1, epsilon=1e-4)
 else:
-    raise ValueError(f"Unknown distribution: {args.distribution}")
+    raise ValueError(f"Unknown likelihood: {args.likelihood}")
 
 model = blvm.models.WaveNet(
     likelihood=likelihood,

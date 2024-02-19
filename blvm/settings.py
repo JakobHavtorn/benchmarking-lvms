@@ -18,7 +18,7 @@ def read_env_file():
 
     with open(ENV_FILE, "r") as envfile_buffer:
         env_text = envfile_buffer.read()
-    return dict([line.split("=") for line in env_text.splitlines()])
+    return dict([line.split("=") for line in env_text.splitlines() if line and "=" in line])
 
 
 ENV = read_env_file()
@@ -88,3 +88,5 @@ CHECKPOINT_DIR = os.path.join(WANDB_DIR, "wandb")
 # make directories
 for path in [DATA_DIRECTORY, SOURCE_DIRECTORY, VOCAB_DIRECTORY, WANDB_DIR]:
     os.makedirs(path, exist_ok=True)
+
+WANDB_PROJECT = "benchmarking-lvms"

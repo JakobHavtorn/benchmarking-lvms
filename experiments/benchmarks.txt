@@ -1,71 +1,114 @@
-# epoch 2: Had no epoch set
-# epoch 3: Had epoch 3000 set
-
 ======================================================================================================
 Benchmark experiments - µ-law PCM TIMIT
 ======================================================================================================
 
-s=1
-python experiments/experiment_wavenet_audio.py --epochs 3 --n_stacks 5 --n_layers 10 --res_channels 96 --input_coding mu_law --num_bits 16 --use_amp True --batch_size 3 --random_segment_size 16000 --split_eval True
-python experiments/experiment_lstm_audio.py --epochs 3 --batch_len 32 --stack_size 1 --hidden_size 256 --num_layers 1 --use_amp True
-python experiments/experiment_vrnn_audio.py --epochs 3 --likelihood DMoL --free_nats_start_value 2 --free_nats_steps 200000 --hidden_size 256 --latent_size 256 --stack_frames 1 --residual_posterior 1 --input_coding mu_law --num_bits 16 --num_mix 10 --random_segment_size 1000 --batch_size 16 --test_every 10
-python experiments/experiment_srnn_audio.py --epochs 3 --likelihood DMoL --free_nats_start_value 2 --free_nats_steps 200000 --hidden_size 256 --latent_size 256 --stack_frames 1 --residual_posterior 1 --input_coding mu_law --num_bits 16 --num_mix 10 --random_segment_size 1000 --batch_size 16 --test_every 10
-python experiments/experiment_stcn_audio.py --epochs 3 --likelihood DMoL --free_nats_start_value 4 --free_nats_steps 25000 --dense True --input_coding mu_law --beta_anneal_steps 0 --use_amp True --num_stack_frames 1 --random_segment_size 1000 --split_eval True --max_grad_norm 1.0 --max_grad_value 0.1 --lr 3e-4 --lr_scheduler_kwargs '{"milestones": [500, 1000, 1500, 2000, 2500], "gamma": 0.5}' --name "STCN-dense(DMoL) µ-law s=1 z=[256,128,64,32,16]"
+# WaveNet
+python experiments/experiment_wavenet_audio.py   --name "TIMIT WaveNet µ-law s=1"                                  --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 3 --n_stacks 5 --n_layers 10 --res_channels 96 --num_bits 16 --n_stack_frames 1 --random_segment_size 16000 --split_eval True
+python experiments/experiment_wavenet_audio.py   --name "TIMIT WaveNet µ-law s=64"                                 --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 40 --n_stacks 5 --n_layers 10 --res_channels 96 --num_bits 16 --n_stack_frames 64
+python experiments/experiment_wavenet_audio.py   --name "TIMIT WaveNet µ-law s=256"                                --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 40 --n_stacks 5 --n_layers 10 --res_channels 96 --num_bits 16 --n_stack_frames 256
 
-s=64
-python experiments/experiment_wavenet_audio.py --n_stacks 5 --n_layers 10 --res_channels 96 --input_coding mu_law --num_bits 16 --epochs 3 --use_amp True --batch_len 40  --n_stack_frames 64 --test_every 5 --generate_every 25
-python experiments/experiment_lstm_audio.py --epochs 2 --batch_len 32 --stack_size 64 --hidden_size 256 --num_layers 1 --use_amp True
-python experiments/experiment_vrnn_audio.py --likelihood DMoL --epochs 3 --batch_len 64 --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 256 --input_coding mu_law --num_bits 16 --num_mix 10
-python experiments/experiment_srnn_audio.py --likelihood DMoL --epochs 3 --batch_len 64 --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 256 --input_coding mu_law --num_bits 16 --num_mix 10
-python experiments/experiment_stcn_audio.py --likelihood DMoL --dense True --input_coding mu_law --beta_anneal_steps 25000 --free_nats_steps 50000 --epochs 3 --use_amp True --num_stack_frames 64 --lr_scheduler_kwargs '{"milestones": [1500, 2500]}' --name "STCN-dense(DMoL) µ-law s=64 z=[256,128,64,32,16]"
-python experiments/experiment_stcn_audio.py --likelihood DMoL --dense True --input_coding mu_law --beta_anneal_steps 25000 --free_nats_steps 50000 --epochs 3 --use_amp True --num_stack_frames 64 --lr_scheduler_kwargs '{"milestones": [1500, 2500]}' --latent_size 256 --num_stacks 5 --name "STCN-dense(DMoL) µ-law s=64 z=[256]"
-python experiments/experiment_clockwork_audio.py --likelihood DMoL --epochs 3 --beta_anneal_steps 150000 --free_nats_steps 300000 --hidden_size 192 --latent_size 128 --strides 64 --precision_posterior True --input_coding mu_law --num_bits 16 --num_mix 10 --length_sampler True --batch_size 0 --dataset timit --test_every 3 --random_segment_size 0 --name "CW-VAE d=192 z=[128] s=[64] TIMIT"
-python experiments/experiment_clockwork_audio.py --likelihood DMoL --epochs 3 --beta_anneal_steps 150000 --free_nats_steps 300000 --hidden_size 192 192 --latent_size 128 64 --strides 64 8 --precision_posterior True --input_coding mu_law --num_bits 16 --num_mix 10 --length_sampler True --batch_size 0 --dataset timit --test_every 3 --random_segment_size 0 --name "CW-VAE d=192 z=[128,64] s=[64,8] TIMIT"
+# LSTM
+python experiments/experiment_lstm_audio.py      --name "TIMIT LSTM µ-law s=1"                                     --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 32 --hidden_size 256 --num_layers 1 --stack_size 1
+python experiments/experiment_lstm_audio.py      --name "TIMIT LSTM µ-law s=64"                                    --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 32 --hidden_size 256 --num_layers 1 --stack_size 64
+python experiments/experiment_lstm_audio.py      --name "TIMIT LSTM µ-law s=256"                                   --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 32 --hidden_size 256 --num_layers 1 --stack_size 256
 
-s=256
-python experiments/experiment_wavenet_audio.py --n_stacks 5 --n_layers 10 --res_channels 96 --input_coding mu_law --num_bits 16 --epochs 3 --use_amp True --batch_len 40 --n_stack_frames 256 --test_every 5 --generate_every 25
-python experiments/experiment_lstm_audio.py --epochs 2 --batch_len 32 --stack_size 256 --hidden_size 256 --num_layers 1 --use_amp True
-python experiments/experiment_vrnn_audio.py --likelihood DMoL --epochs 3 --batch_len 64 --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 256 --input_coding mu_law --num_bits 16 --num_mix 10
-python experiments/experiment_srnn_audio.py --likelihood DMoL --epochs 3 --batch_len 64 --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 256 --input_coding mu_law --num_bits 16 --num_mix 10
-python experiments/experiment_stcn_audio.py --likelihood DMoL --epochs 3 --beta_anneal_steps 25000 --free_nats_steps 50000 --input_coding mu_law --use_amp True --num_stack_frames 256  --lr_scheduler_kwargs '{"milestones": [1500, 2500]}' --dense True --latent_size 256 --num_stacks 5 --name "STCN-dense(DMoL) µ-law s=256 z=[256]" 
-python experiments/experiment_stcn_audio.py --likelihood DMoL --epochs 3 --beta_anneal_steps 25000 --free_nats_steps 50000 --input_coding mu_law --use_amp True --num_stack_frames 64  --lr_scheduler_kwargs '{"milestones": [1500, 2500]}' --dense True --name "STCN-dense(DMoL) µ-law s=64 z=[256,128,64,32,16]"
-python experiments/experiment_clockwork_audio.py --likelihood DMoL --epochs 3 --beta_anneal_steps 150000 --free_nats_steps 300000 --hidden_size 192 --latent_size 128 --strides 256 --precision_posterior True --input_coding mu_law --num_bits 16 --num_mix 10 --length_sampler True --batch_size 0 --dataset timit --test_every 3 --random_segment_size 0 --name "CW-VAE d=192 z=[128] s=[256] TIMIT"
-python experiments/experiment_clockwork_audio.py --likelihood DMoL --epochs 3 --beta_anneal_steps 150000 --free_nats_steps 300000 --hidden_size 192 192 --latent_size 128 64 --strides 256 8 --precision_posterior True --input_coding mu_law --num_bits 16 --num_mix 10 --length_sampler True --batch_size 0 --dataset timit --test_every 3 --random_segment_size 0 --name "CW-VAE d=192 z=[128,64] s=[256,8] TIMIT"
+# VRNN
+python experiments/experiment_vrnn_audio.py      --name "TIMIT VRNN µ-law s=1 z=256"                               --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 16 --free_nats_start_value 2 --free_nats_steps 200000 --hidden_size 256 --latent_size 256 --stack_frames 1   --num_bits 16 --num_mix 10 --random_segment_size 1000
+python experiments/experiment_vrnn_audio.py      --name "TIMIT VRNN µ-law s=64 z=256"                              --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 64  --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 64  --num_bits 16 --num_mix 10
+python experiments/experiment_vrnn_audio.py      --name "TIMIT VRNN µ-law s=256 z=256"                             --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 64  --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 256 --num_bits 16 --num_mix 10
+
+# SRNN
+python experiments/experiment_srnn_audio.py      --name "TIMIT SRNN µ-law s=1 z=256"                               --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 16 --free_nats_start_value 2 --free_nats_steps 200000 --hidden_size 256 --latent_size 256 --stack_frames 1   --num_bits 16 --num_mix 10 --random_segment_size 1000
+python experiments/experiment_srnn_audio.py      --name "TIMIT SRNN µ-law s=64 z=256"                              --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 64  --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 64  --num_bits 16 --num_mix 10
+python experiments/experiment_srnn_audio.py      --name "TIMIT SRNN µ-law s=256 z=256"                             --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 64  --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 256 --num_bits 16 --num_mix 10
+
+# STCN
+python experiments/experiment_stcn_audio.py      --name "TIMIT STCN-dense(DMoL) µ-law s=1 z=[256,128,64,32,16]"    --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 0     --free_nats_steps 25000 --dense True --num_stack_frames 1   --latent_size 256 128 64 32 16 --random_segment_size 1000 --max_grad_norm 1.0 --max_grad_value 0.1
+python experiments/experiment_stcn_audio.py      --name "TIMIT STCN-dense(DMoL) µ-law s=64 z=[256]"                --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 25000 --free_nats_steps 50000 --dense True --num_stack_frames 64  --latent_size 256 --num_stacks 5
+python experiments/experiment_stcn_audio.py      --name "TIMIT STCN-dense(DMoL) µ-law s=64 z=[256,128,64,32,16]"   --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 25000 --free_nats_steps 50000 --dense True --num_stack_frames 64  --latent_size 256 128 64 32 16
+python experiments/experiment_stcn_audio.py      --name "TIMIT STCN-dense(DMoL) µ-law s=256 z=[256]"               --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 25000 --free_nats_steps 50000 --dense True --num_stack_frames 256 --latent_size 256 --num_stacks 5
+python experiments/experiment_stcn_audio.py      --name "TIMIT STCN-dense(DMoL) µ-law s=256 z=[256,128,64,32,16]"  --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 25000 --free_nats_steps 50000 --dense True --num_stack_frames 256 --latent_size 256 128 64 32 16
+
+# Clockwork VAE
+python experiments/experiment_clockwork_audio.py --name "TIMIT CW-VAE µ-law d=192 z=[128] s=[64]"                  --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 --latent_size 128 --strides 64
+python experiments/experiment_clockwork_audio.py --name "TIMIT CW-VAE µ-law d=192 z=[128,64] s=[64,8]"             --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 192 --latent_size 128 64 --strides 64 8
+python experiments/experiment_clockwork_audio.py --name "TIMIT CW-VAE µ-law d=192 z=[128] s=[256]"                 --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 --latent_size 128 --strides 256
+python experiments/experiment_clockwork_audio.py --name "TIMIT CW-VAE µ-law d=192 z=[128,64] s=[256,8]"            --dataset timit --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 192 --latent_size 128 64 --strides 256 8
 
 
 ======================================================================================================
 Benchmark experiments - µ-law PCM Librispeech (100h)
 ======================================================================================================
 
-s=1
-python experiments/experiment_wavenet_audio.py --n_stack_frames 1 --dataset librispeech_100h --n_stacks 5 --n_layers 10 --res_channels 96 --input_coding mu_law --num_bits 16 --epochs 3 --use_amp True --batch_size 4 --random_segment_size 16000 --length_sampler False --test_every 5 --generate_every 25
-python experiments/experiment_lstm_audio.py --epochs 2 --batch_size 40 --stack_size 1 --hidden_size 256 --num_layers 1 --dataset librispeech_100h --num_workers 12 --test_every 8 --use_amp True --random_segment_size 16000 --lr_scheduler_kwargs '{"milestones": [250, 400], "gamma": 0.5}' --name "lstm d=256 s=1 LS100"
+# WaveNet
+python experiments/experiment_wavenet_audio.py   --name "LS100 WaveNet µ-law s=1"                                  --dataset librispeech_100h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 4 --n_stacks 5 --n_layers 10 --res_channels 96 --num_bits 16 --n_stack_frames 1 --random_segment_size 16000 --split_eval True
+python experiments/experiment_wavenet_audio.py   --name "LS100 WaveNet µ-law s=64"                                 --dataset librispeech_100h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 50 --n_stacks 5 --n_layers 10 --res_channels 96 --num_bits 16 --n_stack_frames 64
 
-s=64
-python experiments/experiment_wavenet_audio.py --n_stack_frames 64 --dataset librispeech_100h --n_stacks 5 --n_layers 10 --res_channels 96 --input_coding mu_law --num_bits 16 --epochs 3 --use_amp True --batch_len 50 --test_every 2 --generate_every 10
-python experiments/experiment_lstm_audio.py --epochs 2 --batch_len 64 --stack_size 64 --hidden_size 256 --num_layers 1 --use_amp True --dataset librispeech_100h --test_every 5
-#python experiments/experiment_clockwork_audio.py --epochs 2
-#python experiments/experiment_clockwork_audio.py --epochs 2
-python experiments/experiment_stcn_audio.py --likelihood DMoL --dense True --input_coding mu_law --beta_anneal_steps 75000 --free_nats_steps 150000 --free_nats_start_value 1 --epochs 3 --use_amp True --num_stack_frames 64 --max_grad_norm 1.0 --max_grad_value 0.1 --dataset librispeech_100h --test_every 10 --split_eval False --lr_scheduler_kwargs '{"milestones": [200, 400]}'
+# LSTM
+python experiments/experiment_lstm_audio.py      --name "LS100 LSTM µ-law s=1"                                     --dataset librispeech_100h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 40 --hidden_size 256 --num_layers 1 --stack_size 1 --random_segment_size 16000
+python experiments/experiment_lstm_audio.py      --name "LS100 LSTM µ-law s=64"                                    --dataset librispeech_100h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 64  --hidden_size 256 --num_layers 1 --stack_size 64
+
+# STCN
+python experiments/experiment_stcn_audio.py      --name "LS100 STCN-dense(DMoL) µ-law s=64 z=[256,128,64,32,16]"   --dataset librispeech_100h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 75000 --free_nats_steps 150000 --dense True --free_nats_start_value 1 --num_stack_frames 64 --latent_size 256 128 64 32 16
+
+# Clockwork VAE
+python experiments/experiment_clockwork_audio.py --name "LS100 CW-VAE µ-law d=192 z=[128] s=[64]"                  --dataset librispeech_100h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 --latent_size 128 --strides 64
+python experiments/experiment_clockwork_audio.py --name "LS100 CW-VAE µ-law d=192 z=[128,64] s=[64,8]"             --dataset librispeech_100h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 192 --latent_size 128 64 --strides 64 8
 
 
 ======================================================================================================
 Benchmark experiments - µ-law PCM Librispeech (10h)
 ======================================================================================================
 
-s=1
-#python experiments/experiment_wavenet_audio.py --epochs 2
-python experiments/experiment_lstm_audio.py --epochs 2 --batch_size 40 --stack_size 1 --hidden_size 256 --num_layers 1 --dataset librilight_train_10h --num_workers 8 --test_every 80 --use_amp True --random_segment_size 16000
+# WaveNet
+python experiments/experiment_wavenet_audio.py   --name "LS10 WaveNet µ-law s=1"                                   --dataset librilight_train_10h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 4 --n_stacks 5 --n_layers 10 --res_channels 96 --num_bits 16 --n_stack_frames 1  --random_segment_size 16000 --split_eval True
+python experiments/experiment_wavenet_audio.py   --name "LS10 WaveNet µ-law s=64"                                  --dataset librilight_train_10h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 50 --n_stacks 5 --n_layers 10 --res_channels 96 --num_bits 16 --n_stack_frames 64
 
-s=64
-#python experiments/experiment_wavenet_audio.py --epochs 2
-#python experiments/experiment_lstm_audio --epochs 2
-#python experiments/experiment_clockwork_audio --epochs 2
-#python experiments/experiment_clockwork_audio --epochs 2
-python experiments/experiment_stcn_audio.py --likelihood DMoL --dense True --input_coding mu_law --beta_anneal_steps 25000 --free_nats_steps 50000 --free_nats_start_value 1 --epochs 3 --use_amp True --num_stack_frames 64 --max_grad_norm 1.0 --max_grad_value 0.1 --dataset librispeech_100h --test_every 2 --split_eval False --random_segment_size 32000 --lr_scheduler_kwargs '{"milestones": [125, 250], "gamma": 0.5}'
+# LSTM
+python experiments/experiment_lstm_audio.py      --name "LS10 LSTM µ-law s=1"                                      --dataset librilight_train_10h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 40 --hidden_size 256 --num_layers 1 --stack_size 1 --random_segment_size 16000
+python experiments/experiment_lstm_audio.py      --name "LS10 LSTM µ-law s=64"                                     --dataset librilight_train_10h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_len 64  --hidden_size 256 --num_layers 1 --stack_size 64
+
+# STCN
+python experiments/experiment_stcn_audio.py      --name "LS100 STCN-dense(DMoL) µ-law s=64 z=[256,128,64,32,16]"   --dataset librilight_train_10h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 75000 --free_nats_steps 150000 --dense True --free_nats_start_value 1 --num_stack_frames 64 --latent_size 256 128 64 32 16
+
+# Clockwork VAE
+python experiments/experiment_clockwork_audio.py --name "LS10 CW-VAE µ-law d=192 z=[128] s=[64]"                  --dataset librilight_train_10h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 --latent_size 128 --strides 64
+python experiments/experiment_clockwork_audio.py --name "LS10 CW-VAE µ-law d=192 z=[128,64] s=[64,8]"             --dataset librilight_train_10h --likelihood DMoL --input_coding mu_law --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 192 --latent_size 128 64 --strides 64 8
 
 
 ======================================================================================================
 Benchmark experiments - Linear PCM TIMIT
 ======================================================================================================
 
+# WaveNet
+python experiments/experiment_wavenet_audio.py   --name "TIMIT WaveNet linear s=1"                                  --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_size 3 --n_stacks 5 --n_layers 10 --res_channels 96 --num_bits 16 --n_stack_frames 1 --random_segment_size 16000 --split_eval True
+python experiments/experiment_wavenet_audio.py   --name "TIMIT WaveNet linear s=64"                                 --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_len 40 --n_stacks 5 --n_layers 10 --res_channels 96 --num_bits 16 --n_stack_frames 64
+python experiments/experiment_wavenet_audio.py   --name "TIMIT WaveNet linear s=256"                                --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_len 40 --n_stacks 5 --n_layers 10 --res_channels 96 --num_bits 16 --n_stack_frames 256
+
+# LSTM
+python experiments/experiment_lstm_audio.py      --name "TIMIT LSTM linear s=1"                                     --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_len 32 --hidden_size 256 --num_layers 1 --stack_size 1
+python experiments/experiment_lstm_audio.py      --name "TIMIT LSTM linear s=64"                                    --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_len 32 --hidden_size 256 --num_layers 1 --stack_size 64
+python experiments/experiment_lstm_audio.py      --name "TIMIT LSTM linear s=256"                                   --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_len 32 --hidden_size 256 --num_layers 1 --stack_size 256
+
+# VRNN
+python experiments/experiment_vrnn_audio.py      --name "TIMIT VRNN linear s=1 z=256"                               --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_size 16 --free_nats_start_value 2 --free_nats_steps 200000 --hidden_size 256 --latent_size 256 --stack_frames 1   --num_bits 16 --num_mix 10 --random_segment_size 1000
+python experiments/experiment_vrnn_audio.py      --name "TIMIT VRNN linear s=64 z=256"                              --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_len 64  --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 64  --num_bits 16 --num_mix 10
+python experiments/experiment_vrnn_audio.py      --name "TIMIT VRNN linear s=256 z=256"                             --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_len 64  --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 256 --num_bits 16 --num_mix 10
+
+# SRNN
+python experiments/experiment_srnn_audio.py      --name "TIMIT SRNN linear s=1 z=256"                               --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_size 16 --free_nats_start_value 2 --free_nats_steps 200000 --hidden_size 256 --latent_size 256 --stack_frames 1   --num_bits 16 --num_mix 10 --random_segment_size 1000
+python experiments/experiment_srnn_audio.py      --name "TIMIT SRNN linear s=64 z=256"                              --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_len 64  --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 64  --num_bits 16 --num_mix 10
+python experiments/experiment_srnn_audio.py      --name "TIMIT SRNN linear s=256 z=256"                             --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_len 64  --free_nats_start_value 2 --free_nats_steps 100000 --hidden_size 256 --latent_size 256 --stack_frames 256 --num_bits 16 --num_mix 10
+
+# STCN
+python experiments/experiment_stcn_audio.py      --name "TIMIT STCN-dense(DMoL) linear s=1 z=[256,128,64,32,16]"    --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 0     --free_nats_steps 25000 --dense True --num_stack_frames 1   --latent_size 256 128 64 32 16 --random_segment_size 1000 --max_grad_norm 1.0 --max_grad_value 0.1
+python experiments/experiment_stcn_audio.py      --name "TIMIT STCN-dense(DMoL) linear s=64 z=[256]"                --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 25000 --free_nats_steps 50000 --dense True --num_stack_frames 64  --latent_size 256 --num_stacks 5
+python experiments/experiment_stcn_audio.py      --name "TIMIT STCN-dense(DMoL) linear s=64 z=[256,128,64,32,16]"   --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 25000 --free_nats_steps 50000 --dense True --num_stack_frames 64  --latent_size 256 128 64 32 16
+python experiments/experiment_stcn_audio.py      --name "TIMIT STCN-dense(DMoL) linear s=256 z=[256]"               --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 25000 --free_nats_steps 50000 --dense True --num_stack_frames 256 --latent_size 256 --num_stacks 5
+python experiments/experiment_stcn_audio.py      --name "TIMIT STCN-dense(DMoL) linear s=256 z=[256,128,64,32,16]"  --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp True --batch_size 20 --beta_anneal_steps 25000 --free_nats_steps 50000 --dense True --num_stack_frames 256 --latent_size 256 128 64 32 16
+
+# Clockwork VAE
+python experiments/experiment_clockwork_audio.py --name "TIMIT CW-VAE linear d=192 z=[128] s=[64]"                  --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 --latent_size 128 --strides 64
+python experiments/experiment_clockwork_audio.py --name "TIMIT CW-VAE linear d=192 z=[128,64] s=[64,8]"             --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 192 --latent_size 128 64 --strides 64 8
+python experiments/experiment_clockwork_audio.py --name "TIMIT CW-VAE linear d=192 z=[128] s=[256]"                 --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 --latent_size 128 --strides 256
+python experiments/experiment_clockwork_audio.py --name "TIMIT CW-VAE linear d=192 z=[128,64] s=[256,8]"            --dataset timit --likelihood DMoL --input_coding linear --epochs 3 --test_every 1 --use_amp False --batch_size 0 --beta_anneal_steps 150000 --free_nats_steps 300000 --precision_posterior True --num_bits 16 --num_mix 10 --length_sampler True --hidden_size 192 192 --latent_size 128 64 --strides 256 8

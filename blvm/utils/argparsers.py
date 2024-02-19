@@ -32,7 +32,7 @@ train_group.add_argument("--batch_len", type=float_or_str, default=0, help="Batc
 train_group.add_argument("--lr", type=float, default=3e-4, help="")
 train_group.add_argument("--length_sampler", type=str2bool, default=False, help="")  # TODO Replaced by batch_len
 setup_group.add_argument("--save_checkpoints", type=str2bool, default=False, help="whether to store checkpoints or not")
-setup_group.add_argument("--test_every", type=int, default=None, help="test every number of epochs")
+setup_group.add_argument("--test_every", type=int, default=10, help="test every number of epochs")
 
 # Optimizer configuration
 optim_group = parser.add_argument_group("optimizer")

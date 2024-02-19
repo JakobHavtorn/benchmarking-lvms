@@ -243,7 +243,7 @@ class CWVAE(nn.Module):
         same_paddings = []
         for l in range(self.num_levels):
             input_length = math.ceil(x.shape[1] / self.strides[l-1]) if l > 0 else x.shape[1]
-            padding = get_same_padding(input_length, self.receptive_fields[l], self.strides[l])
+            padding = get_same_padding(input_length, kernel_size=self.receptive_fields[l], stride=self.strides[l])
             same_paddings.append(padding)
 
         # compute encodings
@@ -253,6 +253,7 @@ class CWVAE(nn.Module):
 
         # initial context for top layer
         context_l = [None] * len(encodings[-1])
+        context_l = [self.cells[-1].get_empty_context(x.size(0))] * len(encodings[-1])
 
         # initial RSSM state (z, h)
         states = [cell.get_initial_state(batch_size=x.size(0)) for cell in self.cells] if state0 is None else state0
@@ -408,7 +409,7 @@ class CWVAEAudio(BaseModel):
         likelihood: str = "dmol",
         num_mix: int = 10,
         num_bins: int = 256,
-        norm_type: str = "ChannelwiseLayerNorm",
+        # norm_type: str = "ChannelwiseLayerNorm",
     ):
         super().__init__()
 
@@ -423,7 +424,7 @@ class CWVAEAudio(BaseModel):
         self.stride_per_layer = stride_per_layer
         self.num_mix = num_mix
         self.num_bins = num_bins
-        self.norm_type = norm_type
+        # self.norm_type = norm_type
 
         self.num_levels = len(strides)
 
@@ -466,7 +467,7 @@ class CWVAEAudio(BaseModel):
             channels=h_size,
             kernel_size=5,
             num_blocks=num_level_layers,
-            norm_type=norm_type,
+            # norm_type=norm_type,
             stride_per_block=stride_per_layer,
             transposed=False,
             block_type="BlockSeparable",
@@ -481,7 +482,7 @@ class CWVAEAudio(BaseModel):
             channels_out=channels_out,
             kernel_size=5,
             num_blocks=num_level_layers,
-            norm_type=norm_type,
+            # norm_type=norm_type,
             stride_per_block=stride_per_layer,
             transposed=True,
             block_type="BlockSeparable",

@@ -1,1 +1,1 @@
-import blvm.settings
+from blvm.settings import *

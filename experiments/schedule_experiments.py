@@ -83,7 +83,7 @@ for command in tqdm(commands, desc="Submitting runs"):
     future.command = command
     futures.append(future)
     if len(futures) <= args.num_parallel:
-        time.sleep(4)  # sleep between submitting runs that run in parallel to allow time to allocate on GPU.
+        time.sleep(10)  # sleep between submitting runs that run in parallel to allow time to allocate on GPU.
 
 n_failures = 0
 rich.print("Running commands...")

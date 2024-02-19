@@ -39,7 +39,7 @@ def main():
         max_grad_norm=3000.0,
         max_grad_value=1000.0,
         dataset="timit",
-        project="benchmarks",
+        project=blvm.WANDB_PROJECT,
         entity=None,
     )
     model_group = parser.add_argument_group("model")
@@ -57,6 +57,7 @@ def main():
     model_group.add_argument("--random_segment_size", default=None, type=int, help="timesteps to randomly subsample per training example")
     model_group.add_argument("--coder_type", default="convolutional", type=str, help="deterministic encoder+decoder type")
     model_group.add_argument("--likelihood", default="DMoL", type=str, help="likelihood module")
+    model_group.add_argument("--input_coding", default="mu_law", type=str, choices=["mu_law", "linear"], help="input encoding")
 
     model_group.add_argument("--beta_anneal_steps", default=0, type=int, help="number of steps to anneal beta")
     model_group.add_argument("--beta_start_value", default=0, type=float, help="initial beta annealing value")
