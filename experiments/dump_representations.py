@@ -28,6 +28,10 @@ from blvm.training.restore import load_run
 
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--entity", type=str, help="wandb entity to get the run from")
+parser.add_argument("--project", type=str, default="benchmarks", help="wandb project to get the run from")
+parser.add_argument("--id", type=str, help="wandb run id to get the run from")
+
 parser.add_argument("--extra", default="s256", type=str, help="extra extension of files to save")
 
 parser.add_argument("--dataset", type=str, default="timit", choices=DATASETS.keys(), help="dataset to use")
@@ -42,10 +46,6 @@ parser.add_argument("--device", type=str, default="auto", choices=["auto", "cuda
 parser.add_argument("--use_amp", type=str2bool, default=False, help="if true, use automatic mixed precision")
 parser.add_argument("--num_workers", type=int, default=8, help="number of dataloader workers")
 parser.add_argument("--dry", action="store_true", help="dry run without saving")
-
-parser.add_argument("--entity", type=str, default="blvm")
-parser.add_argument("--project", type=str, default="cwvae")
-parser.add_argument("--id", type=str, default=None)
 
 args = parser.parse_args()
 
