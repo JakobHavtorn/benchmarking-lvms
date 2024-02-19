@@ -61,7 +61,10 @@ if args.likelihood != "DMoL":
 
 if args.seed is None:
     args.seed = get_random_seed()
+
 set_seed(args.seed)
+
+args.batch_len = 16000 * args.batch_len if isinstance(args.batch_len, float) else args.batch_len
 
 device = get_device() if args.device == "auto" else torch.device(args.device)
 torch.cuda.set_device(device)
@@ -101,7 +104,7 @@ if args.batch_len:
     train_sampler = LengthTrainSampler(
         source=dataset.train,
         field=dataset.audio_length,
-        batch_len=16000 * args.batch_len if isinstance(args.batch_len, float) else args.batch_len,
+        batch_len=args.batch_len,
         max_pool_difference=16000 * 0.3,
         min_pool_size=512,
     )

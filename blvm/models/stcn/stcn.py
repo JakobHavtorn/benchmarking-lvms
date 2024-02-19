@@ -25,8 +25,7 @@ from blvm.modules.distributions import (
     DiagonalGaussianMixtureDense,
     DiscretizedLogisticMixtureDense,
 )
-from blvm.utils.operations import sequence_mask, split_sequence, stack_tensor, unstack_tensor
-from blvm.utils.padding import get_modulo_length, pad_to_length
+from blvm.utils.operations import sequence_mask, stack_tensor, unstack_tensor
 from blvm.utils.variational import discount_free_nats, kl_divergence_gaussian, kl_divergence_gaussian_mc, rsample_gaussian, precision_weighted_gaussian
 
 

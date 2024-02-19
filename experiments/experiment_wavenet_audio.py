@@ -224,7 +224,7 @@ for epoch in tracker.epochs(args.epochs):
                 else:
                     for (x, x_sl), metadata in tracker.steps(loader):
                         x = x.to(device, non_blocking=True)
-                        splits_x, splits_x_sl = model.split_sequence(x, x_sl, length=3 * args.random_segment_size)
+                        splits_x, splits_x_sl = model.split_sequence(x, x_sl, length=args.random_segment_size)
                         for i, (xs, xs_sl) in enumerate(zip(splits_x, splits_x_sl)):
                             with torch.cuda.amp.autocast(enabled=args.use_amp):
                                 loss, metrics, outputs = model.forward_split(xs, xs_sl, i_split=i)

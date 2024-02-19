@@ -156,7 +156,7 @@ def run(args):
             batch_kwarg = dict(batch_len=args.batch_len if args.batch_len else "max")
     else:
         batch_kwarg = dict(batch_len=args.batch_len * 3)
-    batch_kwarg = dict(batch_len="max")
+
     for source_name in [*dataset.valid_sets, *dataset.test_sets]:
         valid_dataset = BaseDataset(source=source_name, modalities=modalities_test)
         valid_sampler = LengthEvalSampler(
