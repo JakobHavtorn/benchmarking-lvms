@@ -34,13 +34,11 @@ def save_run(
     optimizer_state_dict = optimizer.state_dict() if optimizer is not None else None
     lr_scheduler_state_dict = lr_scheduler.state_dict() if lr_scheduler is not None else None
     scaler_state_dict = scaler.state_dict() if scaler is not None else None
-    tracker_state_dict = tracker.state_dict() if tracker is not None else None
     checkpoint = dict(
         epoch=tracker.epoch,
         optimizer_state_dict=optimizer_state_dict,
         lr_scheduler_state_dict=lr_scheduler_state_dict,
         scaler_state_dict=scaler_state_dict,
-        tracker_state_dict=tracker_state_dict,
     )
     model.save(directory)
     torch.save(checkpoint, os.path.join(directory, CHEKPOINT_STR))
