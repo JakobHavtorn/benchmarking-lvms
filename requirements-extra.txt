@@ -1,0 +1,15 @@
+datasets
+editdistance
+gpustat
+ipdb
+ipykernel
+ipython
+jupyter
+jupyterlab
+jupyterlab-git
+librosa
+nbstripout
+pandas
+scikit-learn
+seaborn
+transformers
