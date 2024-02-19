@@ -127,3 +127,26 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Data folder
+/data/
+
+# VS Code settings
+.vscode
+settings.json
+
+# Pytorch checkpoint files
+*.pt
+
+# wandb
+wandb
+
+# environment file
+blvm.env
+
+# data files
+*.wav
+*.flac
+*.mp3
+*.png
+*.pdf

@@ -1,0 +1,17 @@
+black
+blessed
+more-itertools
+numpy
+pylint
+pytest
+pytest-cov
+pytest-html
+pyyaml
+rich
+soundfile
+torchinfo
+torchtyping
+tqdm
+uniplot
+wandb
+wget
