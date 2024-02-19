@@ -38,8 +38,8 @@ parser.set_defaults(
     lr=3e-4,
     lr_scheduler="MultiStepLR",
     lr_scheduler_kwargs=dict(milestones=[1500, 3000, 4500], gamma=0.1),
-    max_grad_norm=3000.0,
-    max_grad_value=1000.0,
+    max_grad_norm=3.0,
+    max_grad_value=1.0,
     dataset="timit",
     project=blvm.WANDB_PROJECT,
     entity=None,
@@ -222,8 +222,22 @@ for epoch in tracker.epochs(args.epochs):
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
 
-        torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
         torch.nn.utils.clip_grad_value_(model.parameters(), args.max_grad_value)
+        total_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
+
+        # # check for inf or nan values in gradients
+        # invalid_gradients = False
+        # for name, param in model.named_parameters():
+        #     if param.grad is not None:
+        #         invalid_gradients = torch.isnan(param.grad).any() or torch.isinf(param.grad).any()
+        #         if invalid_gradients:
+        #             break
+
+        if total_norm.isnan() or total_norm.isinf():  # or invalid_gradients: this is already handled in scaler.step
+            rich.print(f"\n[red]Gradient norm is {total_norm}. Not updating model parameters.[/red]")
+            optimizer.zero_grad(set_to_none=True)
+            total_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
+            rich.print(f"[red]Gradient norm after zeroing is {total_norm}.[/red]")
 
         scaler.step(optimizer)
         scaler.update()
