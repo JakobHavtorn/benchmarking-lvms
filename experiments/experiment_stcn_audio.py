@@ -153,9 +153,9 @@ def run(args):
         if args.batch_size:
             batch_kwarg = dict(batch_size=args.batch_size)
         else:
-            batch_kwarg = dict(batch_len=args.batch_len if args.batch_len else "max")
+            batch_kwarg = dict(batch_len=args.batch_len * 2 if args.batch_len else "max")
     else:
-        batch_kwarg = dict(batch_len=args.batch_len * 3)
+        batch_kwarg = dict(batch_len=args.batch_len * 2 if args.batch_len else "max")
 
     for source_name in [*dataset.valid_sets, *dataset.test_sets]:
         valid_dataset = BaseDataset(source=source_name, modalities=modalities_test)
@@ -233,8 +233,8 @@ def run(args):
             scaler.scale(loss).backward()
             scaler.unscale_(optimizer)
 
-            torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
             torch.nn.utils.clip_grad_value_(model.parameters(), args.max_grad_value)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
 
             scaler.step(optimizer)
             scaler.update()

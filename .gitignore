@@ -142,7 +142,7 @@ settings.json
 wandb
 
 # environment file
-blvm.env
+BLVM.env
 
 # data files
 *.wav

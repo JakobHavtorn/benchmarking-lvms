@@ -223,8 +223,8 @@ for epoch in tracker.epochs(args.epochs):
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
 
-        torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
         torch.nn.utils.clip_grad_value_(model.parameters(), args.max_grad_value)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
 
         scaler.step(optimizer)
         scaler.update()

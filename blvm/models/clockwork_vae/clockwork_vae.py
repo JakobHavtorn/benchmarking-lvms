@@ -252,7 +252,6 @@ class CWVAE(nn.Module):
         encodings = [enc.unbind(2) for enc in encodings_list]  # unbind time dimension (List[Tuple[Tensor]])
 
         # initial context for top layer
-        context_l = [None] * len(encodings[-1])
         context_l = [self.cells[-1].get_empty_context(x.size(0))] * len(encodings[-1])
 
         # initial RSSM state (z, h)
@@ -349,7 +348,7 @@ class CWVAE(nn.Module):
         states = [cell.get_initial_state(batch_size=n_samples) for cell in self.cells] if state0 is None else state0
 
         # initial context_l for top layer
-        context_l = [None] * (max_timesteps // self.overall_strides[-1])
+        context_l = [self.cells[-1].get_empty_context(n_samples)] * (max_timesteps // self.overall_strides[-1])
 
         # compute lengths of representations at the different levels if same padding and if not
         same_paddings = []
@@ -369,7 +368,7 @@ class CWVAE(nn.Module):
             for t in range(T_l):
                 # reset stochastic state whenever the layer above ticks (never reset top)
                 if self.with_resets and (l < self.num_levels - 1) and (t % self.strides[l + 1] == 0):
-                    states[l] = self.cells[l].get_initial_state(batch_size=x.size(0))
+                    states[l] = self.cells[l].get_initial_state(batch_size=n_samples)
 
                 # cell forward
                 states[l], distributions = self.cells[l].generate(states[l], context_l[t])
@@ -389,7 +388,7 @@ class CWVAE(nn.Module):
         x_sample = self.likelihood.sample(parameters)
         x_mode = self.likelihood.mode(parameters)
         x = x_mode if use_mode_observations else x_sample
-        x_sl = torch.ones(x.size(0), dtype=torch.int) * max_timesteps
+        x_sl = torch.ones(n_samples, dtype=torch.int) * max_timesteps
         outputs = SimpleNamespace()
         return (x, x_sl), outputs
 
@@ -409,7 +408,6 @@ class CWVAEAudio(BaseModel):
         likelihood: str = "dmol",
         num_mix: int = 10,
         num_bins: int = 256,
-        # norm_type: str = "ChannelwiseLayerNorm",
     ):
         super().__init__()
 
@@ -424,7 +422,6 @@ class CWVAEAudio(BaseModel):
         self.stride_per_layer = stride_per_layer
         self.num_mix = num_mix
         self.num_bins = num_bins
-        # self.norm_type = norm_type
 
         self.num_levels = len(strides)
 
@@ -467,7 +464,6 @@ class CWVAEAudio(BaseModel):
             channels=h_size,
             kernel_size=5,
             num_blocks=num_level_layers,
-            # norm_type=norm_type,
             stride_per_block=stride_per_layer,
             transposed=False,
             block_type="BlockSeparable",
@@ -482,7 +478,6 @@ class CWVAEAudio(BaseModel):
             channels_out=channels_out,
             kernel_size=5,
             num_blocks=num_level_layers,
-            # norm_type=norm_type,
             stride_per_block=stride_per_layer,
             transposed=True,
             block_type="BlockSeparable",
@@ -504,10 +499,6 @@ class CWVAEAudio(BaseModel):
         self.overall_stride = self.cwvae.overall_stride
         self.split_sequence = self.cwvae.split_sequence
         self.forward_split = self.cwvae.forward_split
-
-        # TODO
-        # self.forward = self.cwvae.forward
-        # self.generate = self.cwvae.generate
 
     def forward(
         self,
