@@ -431,14 +431,14 @@ class SRNNAudio(BaseModel):
         if isinstance(likelihood, str):
             if likelihood == "DMoL":
                 likelihood_module = DiscretizedLogisticMixtureDense(
-                    x_dim=2 * num_mix + num_mix,
+                    x_dim=3 * num_mix,
                     y_dim=1,
                     num_mix=10,
                     num_bins=2 ** 16,
                 )
             elif likelihood == "GMM":
                 likelihood_module = DiagonalGaussianMixtureDense(
-                    x_dim=2 * num_mix + num_mix,
+                    x_dim=3 * num_mix,
                     y_dim=1,
                     num_mix=num_mix,
                     initial_sd=1,
