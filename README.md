@@ -51,7 +51,7 @@ When the first experiment is executed, `blvm` will ask you to specify a root dat
 
 ```md
 # BLVM.env
-/absolute/path/of/root/data/directory
+BLVM_DATA_ROOT_DIRECTORY=/absolute/path/of/root/data/directory
 ```
 
 ### Benchmarks

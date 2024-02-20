@@ -31,7 +31,6 @@ def main():
         epochs=1000,
         save_checkpoints=True,
         test_every=20,
-        batch_len="max",
         optimizer="Adam",
         lr=3e-4,
         lr_scheduler="MultiStepLR",
@@ -170,16 +169,16 @@ def run(args):
         )
         valid_test_dataloaders[source_name] = valid_loader
 
-
     rich.print(vars(args))
     rich.print(train_dataset)
-    if args.length_sampler:
+    if args.batch_len:
         rich.print(train_sampler)
         rich.print(valid_sampler)
     print(model)
     print(f"{model.overall_receptive_field}")
     (x, x_sl), metadata = next(iter(train_loader))
-    model.summary(input_data=x, x_sl=x_sl, pad_strideable=True)
+    x = x[:, :2 * model.overall_receptive_field]
+    model.summary(input_data=x, x_sl=torch.LongTensor([x.size(1)] * x.size(0)), pad_strideable=True, device="cpu")
     model = model.to(device)
 
     wandb.init(**vars(parser.parse_args_by_group().wandb), config=args)
