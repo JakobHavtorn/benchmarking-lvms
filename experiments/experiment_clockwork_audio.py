@@ -177,7 +177,8 @@ def run(args):
     print(model)
     print(f"{model.overall_receptive_field}")
     (x, x_sl), metadata = next(iter(train_loader))
-    model.summary(input_data=x, x_sl=x_sl, pad_strideable=True)
+    x = x[:, :2 * model.overall_receptive_field]
+    model.summary(input_data=x, x_sl=torch.LongTensor([x.size(1)] * x.size(0)), pad_strideable=True, device="cpu")
     model = model.to(device)
 
     wandb.init(**vars(parser.parse_args_by_group().wandb), config=args)
