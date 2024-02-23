@@ -12,6 +12,6 @@ soundfile
 torchinfo
 torchtyping
 tqdm
-uniplot
+uniplot~=0.12.2
 wandb
 wget
