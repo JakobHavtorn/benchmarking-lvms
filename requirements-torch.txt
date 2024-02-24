@@ -18,6 +18,6 @@ torchtext
 torchtyping
 torchvision==0.10.0
 tqdm
-uniplot
+uniplot~=0.12.2
 wandb
 wget

@@ -51,7 +51,7 @@ def test_cosine_annealer_function(anneal_steps, constant_steps, start_value, end
         assert all(v < 0 for v in anneal_diffs)
     else:
         assert all(v == 0 for v in anneal_diffs)
-    
+
     if anneal_steps > 0 or constant_steps > 0:
         assert annealer.value == end_value, "Must end at end value"
     else:
@@ -82,15 +82,12 @@ def test_cosine_annealer_failure(anneal_steps, constant_steps, start_value, end_
 
 
 def test_cosine_annealer_plot():
-    annealer1 = CosineAnnealer(anneal_steps=200, constant_steps=0, start_value=0, end_value=1)
-    values1 = [annealer1.step() for _ in range(200)]
-
-    annealer2 = CosineAnnealer(anneal_steps=100, constant_steps=100, start_value=0, end_value=2)
-    values2 = [annealer2.step() for _ in range(200)]
-
-    annealer3 = CosineAnnealer(anneal_steps=0, constant_steps=0, start_value=0, end_value=1.5)
-    values3 = [annealer3.step() for _ in range(200)]
+    annealers = [
+        CosineAnnealer(anneal_steps=200, constant_steps=0, start_value=0, end_value=1),
+        CosineAnnealer(anneal_steps=100, constant_steps=100, start_value=0, end_value=2),
+        CosineAnnealer(anneal_steps=0, constant_steps=0, start_value=0, end_value=1.5)
+    ]
+    values = [[an.step() for _ in range(200)] for an in annealers]
 
     print()
-    xs = list(range(200))
-    uniplot.plot([values1, values2, values3], [xs, xs, xs], legend_labels=[str(annealer1), str(annealer2), str(annealer3)])
+    uniplot.plot(values, legend_labels=annealers)
